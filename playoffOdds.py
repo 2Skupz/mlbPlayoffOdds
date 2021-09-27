@@ -3,6 +3,7 @@
 from pybaseball import schedule_and_record as teamSched
 from random import random as rand
 from random import randint as ri
+from random import shuffle as shuff
 import pandas as pd
 import csv
 import math
@@ -64,7 +65,6 @@ def calcTeamPythags(teamList,gameBallast,runBallast):
 def runSimulations(teamList,futureGames,numSims,gameBallast,runBallast,lastXGames):
     printStandings=False
     for i in range(numSims):
-        #print("Simulation %d" % (i+1))
         simOneSeason(teamList,futureGames,gameBallast,runBallast,printStandings)
 
 def updateTeamPythag(teamList,gameBallast,runBallast):
@@ -74,6 +74,7 @@ def updateTeamPythag(teamList,gameBallast,runBallast):
 def simOneSeason(teamList,futureGames,gameBallast=0,runBallast=0,printStandings=False):
     for team in teamList:
         team.resetSimStats()
+        team.tieBreaker=rand()/10**6
     for game in futureGames:
         game.simGame()
     for team in teamList:
@@ -215,7 +216,7 @@ class Team:
         self.simWildCard=0
         self.totalSimWins=0
         self.totalSimLosses=0
-        self.tieBreaker=rand()/10**6
+        #self.tieBreaker=rand()/10**6
 
     def getCurrentYearSchedule(self,year,teamList,leagueFutureGames):
         schedule=teamSched(year,self.abbr)
@@ -316,6 +317,7 @@ class Team:
         self.simPlayoffs=self.simDivTitles+self.simWildCard
         self.totalSimWins+=self.simWins
         self.totalSimLosses+=self.simLosses
+        #self.tieBreaker=rand()/10**6
 
     def printSimSummary(self,numSeasons):
         name=self.nickname.ljust(16)
